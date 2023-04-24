@@ -1,6 +1,7 @@
 
 import { useEffect, useState } from 'react'
 import numbers from './services/numbers'
+import './App.css'
 
 const Person = ({persons,filter,deletePerson}) => {
   let people = !filter ? persons : persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
@@ -34,11 +35,33 @@ const NewPersonForm = ({addName, newName, changeText, changeNumber, newNumber}) 
   )
 }
 
+const Success = ({message}) => {
+  if (message===null) return null
+
+  return (
+    <div className="success">
+      {message}
+    </div>
+  )
+}
+
+const Error = ({message}) => {
+  if (message===null) return null
+
+  return (
+    <div className="error">
+      {message}
+    </div>
+  )
+}
+
 const App = () => {
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState("")
   const [filter, setFilter] = useState("")
+  const [successMessage, setSuccessMessage] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(()=>{
     numbers.getAll()
@@ -55,13 +78,31 @@ const App = () => {
     if (person) {
       if (window.confirm(`${person.name} already exists in phonebook, replace the old number?`)){
         numbers.update(person.id,{...person,number:newNumber})
-        .then(response => setPersons(persons.map(p => p.id!==response.data.id ? p : response.data)))
+        .then(response => {
+          setPersons(persons.map(p => p.id!==response.data.id ? p : response.data))
+          setSuccessMessage(`Phone number for ${response.data.name} was changed`)
+          setTimeout(() => {
+            setSuccessMessage(null)
+          }, 5000)
+        }).catch(error => {
+          setErrorMessage(`${person.name} has already been deleted from server`)
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000)
+          setPersons(persons.filter(p => p.id!==person.id))
+        })
         setNewName("")
         setNewNumber("")
       }
     } else {
       numbers.create(newPerson)
-        .then(response => setPersons(persons.concat(response.data)))
+        .then(response => {
+          setPersons(persons.concat(response.data))
+          setSuccessMessage(`${response.data.name} added to phonebook`)
+          setTimeout(() => {
+            setSuccessMessage(null)
+          }, 5000)
+        })
       setNewName("")
       setNewNumber("")
     }
@@ -75,9 +116,13 @@ const App = () => {
     } 
   }
 
+  
+
   return (
     <div>
       <h2>Phonebook</h2>
+      <Success message={successMessage} />
+      <Error message={errorMessage} />
       <FilterField filter={filter} onChange={ev=>setFilter(ev.target.value)}/>
       <h3>Add a new number</h3>
       <NewPersonForm addName={addName} changeText={changeText} newNumber={newNumber} changeNumber={changeNumber} newName={newName} />
