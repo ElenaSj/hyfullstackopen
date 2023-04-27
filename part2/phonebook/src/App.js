@@ -85,27 +85,32 @@ const App = () => {
             setSuccessMessage(null)
           }, 5000)
         }).catch(error => {
-          setErrorMessage(`${person.name} has already been deleted from server`)
+          setErrorMessage(`Failed to update ${person.name}: ${error.response.data.error}`)
           setTimeout(() => {
             setErrorMessage(null)
           }, 5000)
-          setPersons(persons.filter(p => p.id!==person.id))
         })
         setNewName("")
         setNewNumber("")
       }
     } else {
-      numbers.create(newPerson)
+    numbers.create(newPerson)
         .then(response => {
           setPersons(persons.concat(response.data))
           setSuccessMessage(`${response.data.name} added to phonebook`)
           setTimeout(() => {
             setSuccessMessage(null)
           }, 5000)
+          setNewName("")
+          setNewNumber("")
+        }).catch(error => {
+          setErrorMessage(`Adding a new phonebook entry failed: ${error.response.data.error}`)
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000)
         })
-      setNewName("")
-      setNewNumber("")
-    }
+     
+      }
   }
 
   const deletePerson = (id) => {

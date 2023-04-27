@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const url=`http://localhost:3001/persons`
+const url=`/api/persons`
 
 const getAll = () => {
     return axios.get(url)
@@ -18,4 +18,4 @@ const remove = id => {
     return axios.delete(`${url}/${id}`)
 }
 
-export default {getAll, create, update, remove}
+module.exports = {getAll, create, update, remove}
