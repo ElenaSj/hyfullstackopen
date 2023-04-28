@@ -1,0 +1,10 @@
+PUT http://localhost:3003/api/blogs/6449072b61b266e78033e3ac
+Content-Type: application/json
+
+{
+    
+"title": "Mehiläisen elämää",
+"author": "Maija Mehiläinen",
+"url": "www.bee.com",
+"likes": 3
+}
