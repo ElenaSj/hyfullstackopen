@@ -1,9 +1,13 @@
-POST http://localhost:3003/api/users
+POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-    "name": "Niilo Nahka",
-    "username": "Leathermanhhh",
+
+        "title": "React patterns",
+        "author": "Michael Chan",
+        "url": "https://reactpatterns.com/",
+        "user": "6450bdc820b134f85aaf02de"
+ 
 
    
    
