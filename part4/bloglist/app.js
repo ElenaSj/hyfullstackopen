@@ -1,7 +1,6 @@
 const config = require('./utils/config')
 const express = require('express')
 require('express-async-errors')
-const logger = require('./utils/logger')
 const blogsRouter = require('./controllers/blogs')
 const usersRouter = require('./controllers/users')
 const loginRouter = require('./controllers/login')
@@ -12,7 +11,7 @@ const mongoose = require('mongoose')
 
 mongoose.set('strictQuery', false)
 
-logger.info('Connecting to database')
+middleware.info('Connecting to database')
 
 mongoose.connect(config.MONGODB_URI)
     .then(() => middleware.info('Connected to MongoDB'))
