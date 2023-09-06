@@ -3,6 +3,7 @@ const supertest = require('supertest')
 const app = require('../app')
 const api = supertest(app)
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
 const initialBlogs = [
     {
@@ -18,6 +19,17 @@ const initialBlogs = [
         likes: 5,
     }
 ]
+
+const newUser = {
+    'name': 'test',
+    'username': 'test',
+    'password': 'test'
+}
+
+const user = {
+    'username': 'test',
+    'password': 'test'
+}
 
 beforeEach(async () => {
     await Blog.deleteMany({})
@@ -45,13 +57,23 @@ describe('get blogs', () => {
 })
 
 describe('adding a new blog', () => {
+
+    beforeAll(async () => {
+        await User.deleteMany({})
+        await api.post('/api/users').send(newUser)
+    })
+
     test('undefined likes default to 0', async () => {
         const newBlog = {
             title: 'Canonical string reduction',
             author: 'Edsger W. Dijkstra',
             url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
         }
-        const response = await api.post('/api/blogs').send(newBlog)
+        const loginResponse = await api.post('/api/login').send(user)
+        let headers = {
+            'Authorization': `Bearer ${loginResponse.body.token}`
+        }
+        const response = await api.post('/api/blogs').send(newBlog).set(headers)
         expect(response.body.likes).toBe(0)
     })
     test('missing title fails with 400', async () => {
@@ -59,14 +81,33 @@ describe('adding a new blog', () => {
             author: 'Edsger W. Dijkstra',
             url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
         }
-        await api.post('/api/blogs', newBlog).expect(400)
+        const loginResponse = await api.post('/api/login').send(user)
+        let headers = {
+            'Authorization': `Bearer ${loginResponse.body.token}`
+        }
+        await api.post('/api/blogs').send(newBlog).set(headers).expect(400)
     })
     test('missing url fails with 400', async () => {
         const newBlog = {
             title: 'Canonical string reduction',
             author: 'Edsger W. Dijkstra',
         }
-        await api.post('/api/blogs', newBlog).expect(400)
+        const loginResponse = await api.post('/api/login').send(user)
+        let headers = {
+            'Authorization': `Bearer ${loginResponse.body.token}`
+        }
+        await api.post('/api/blogs').send(newBlog).set(headers).expect(400)
+    })
+    test('bad token fails with 401', async () => {
+        const newBlog = {
+            title: 'Canonical string reduction',
+            author: 'Edsger W. Dijkstra',
+            url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
+        }
+        let headers = {
+            'Authorization': `Bearer `
+        }
+        await api.post('/api/blogs').send(newBlog).set(headers).expect(401)
     })
 })
 
