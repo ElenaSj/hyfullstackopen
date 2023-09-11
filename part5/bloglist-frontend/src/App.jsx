@@ -110,14 +110,14 @@ const App = () => {
       <Error message = {errorMessage} />
       {user &&
       <div>
-      <h2>blogs</h2>
       <p>{user.name} is logged in</p><button onClick={handleLogout}>logout</button>
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
-      )}
+      <h2>blogs</h2>
       <Togglable buttonLabel='New blog' ref={blogFormRef}>
         <NewBlogForm createBlog={createBlog} />
       </Togglable>
+      {blogs.map(blog =>
+        <Blog key={blog.id} blog={blog} />
+      )}
       </div>
     }
       {!user &&
