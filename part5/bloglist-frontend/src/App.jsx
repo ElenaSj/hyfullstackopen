@@ -69,6 +69,16 @@ const App = () => {
     }
   }
 
+  const updateBlog = async (updatedBlog) => {
+    updatedBlog = ({...updatedBlog, user: updatedBlog.user.id, likes: updatedBlog.likes+1})
+    blogService.update(updatedBlog.id, updatedBlog)
+    const newBlogs = blogs.map(blog => {
+      if (blog.id == updatedBlog.id) return ({...blog, likes: blog.likes+1})
+      else return blog
+    })
+    setBlogs(newBlogs)
+  }
+
   const handleLogin = async (event) => {
     event.preventDefault()
     console.log('logging in as', username)
@@ -117,7 +127,7 @@ const App = () => {
         <NewBlogForm createBlog={createBlog} />
       </Togglable>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
       )}
       </div>
     }
