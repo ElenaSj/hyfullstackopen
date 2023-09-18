@@ -115,6 +115,8 @@ const App = () => {
       }, 5000)
   }
 
+  let sortedBlogs = blogs.sort((a, b) => a.likes - b.likes).toReversed()
+
   return (
     <div>
       <Success message = {succesMessage} />
@@ -126,7 +128,7 @@ const App = () => {
       <Togglable buttonLabel='New blog' ref={blogFormRef}>
         <NewBlogForm createBlog={createBlog} />
       </Togglable>
-      {blogs.map(blog =>
+      {sortedBlogs.map(blog =>
         <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
       )}
       </div>
