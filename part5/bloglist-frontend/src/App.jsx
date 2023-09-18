@@ -6,7 +6,7 @@ import NewBlogForm from './components/NewBlogForm'
 import Togglable from './components/Togglable'
 import './app.css'
 
-const Success = ({message}) => {
+const Success = ({ message }) => {
   if (message) {
     return (
       <div className='success'>
@@ -16,7 +16,7 @@ const Success = ({message}) => {
   }
 }
 
-const Error = ({message}) => {
+const Error = ({ message }) => {
   if (message) {
     return (
       <div className='error'>
@@ -39,7 +39,7 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
-    )  
+    )
   }, [user])
 
   useEffect(() => {
@@ -53,11 +53,11 @@ const App = () => {
 
   const createBlog = async (newBlog) => {
     try {
-    blogFormRef.current.toggleVisibility()
-    let blog = await blogService.create(newBlog)
-    blog = ({...blog, user: user})
-    setBlogs(blogs.concat(blog))
-    setSuccesMessage(`Added new blog ${blog.title}`)
+      blogFormRef.current.toggleVisibility()
+      let blog = await blogService.create(newBlog)
+      blog = ({ ...blog, user: user })
+      setBlogs(blogs.concat(blog))
+      setSuccesMessage(`Added new blog ${blog.title}`)
       setTimeout(() => {
         setSuccesMessage('')
       }, 5000)
@@ -70,10 +70,10 @@ const App = () => {
   }
 
   const updateBlog = async (updatedBlog) => {
-    updatedBlog = ({...updatedBlog, user: updatedBlog.user.id, likes: updatedBlog.likes+1})
+    updatedBlog = ({ ...updatedBlog, user: updatedBlog.user.id, likes: updatedBlog.likes+1 })
     blogService.update(updatedBlog.id, updatedBlog)
     const newBlogs = blogs.map(blog => {
-      if (blog.id == updatedBlog.id) return ({...blog, likes: blog.likes+1})
+      if (blog.id === updatedBlog.id) return ({ ...blog, likes: blog.likes+1 })
       else return blog
     })
     setBlogs(newBlogs)
@@ -109,7 +109,7 @@ const App = () => {
   const remove = async (blog) => {
     if(window.confirm(`Do you want to delete blog ${blog.title}?`)) {
       await blogService.remove(blog.id)
-      const newBlogs = blogs.filter(a => a.id != blog.id)
+      const newBlogs = blogs.filter(a => a.id !== blog.id)
       setBlogs(newBlogs)
     }
   }
@@ -118,9 +118,9 @@ const App = () => {
     window.localStorage.removeItem('loggedUser')
     setUser(null)
     setSuccesMessage('Logged out!')
-      setTimeout(() => {
-        setSuccesMessage('')
-      }, 5000)
+    setTimeout(() => {
+      setSuccesMessage('')
+    }, 5000)
   }
 
   let sortedBlogs = blogs.sort((a, b) => a.likes - b.likes).toReversed()
@@ -131,21 +131,21 @@ const App = () => {
       <Error message = {errorMessage} />
       {user &&
       <div>
-      <p>{user.name} is logged in</p><button onClick={handleLogout}>logout</button>
-      <h2>blogs</h2>
-      <Togglable buttonLabel='New blog' ref={blogFormRef}>
-        <NewBlogForm createBlog={createBlog} />
-      </Togglable>
-      {sortedBlogs.map(blog =>
-        <Blog key={blog.id} blog={blog} updateBlog={updateBlog} user={user} remove={remove} />
-      )}
+        <p>{user.name} is logged in</p><button onClick={handleLogout}>logout</button>
+        <h2>blogs</h2>
+        <Togglable buttonLabel='New blog' ref={blogFormRef}>
+          <NewBlogForm createBlog={createBlog} />
+        </Togglable>
+        {sortedBlogs.map(blog =>
+          <Blog key={blog.id} blog={blog} updateBlog={updateBlog} user={user} remove={remove} />
+        )}
       </div>
-    }
+      }
       {!user &&
       <form onSubmit={handleLogin}>
         <div>
           username
-            <input
+          <input
             type="text"
             value={username}
             name="Username"
@@ -154,7 +154,7 @@ const App = () => {
         </div>
         <div>
           password
-            <input
+          <input
             type="password"
             value={password}
             name="Password"

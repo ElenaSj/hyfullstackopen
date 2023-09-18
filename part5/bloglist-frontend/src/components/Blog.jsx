@@ -4,7 +4,7 @@ const Blog = ({ blog, updateBlog, user, remove }) => {
   const [showDetails, toggleView] = useState(false)
 
   const blogStyle = {
-    
+
     padding: 5,
     border: 'solid',
     borderWidth: 1,
@@ -13,27 +13,27 @@ const Blog = ({ blog, updateBlog, user, remove }) => {
   }
 
   return (
-  <div style={blogStyle}>
-    {!showDetails &&
+    <div style={blogStyle}>
+      {!showDetails &&
     <div>
-      {blog.title}, {blog.author}<button onClick={()=>toggleView(!showDetails)}>view</button>
-    </div> 
-    }
-    {showDetails &&
+      {blog.title}, {blog.author}<button onClick={() => toggleView(!showDetails)}>view</button>
+    </div>
+      }
+      {showDetails &&
     <div>
-      <h3>{blog.title}</h3><button onClick={()=>toggleView(!showDetails)}>hide</button>
+      <h3>{blog.title}</h3><button onClick={() => toggleView(!showDetails)}>hide</button>
       <p>Blogger: {blog.author}</p>
       <p>{blog.url}</p>
-      <p>likes {blog.likes} <button onClick={()=>updateBlog(blog)}>like</button></p>
+      <p>likes {blog.likes} <button onClick={() => updateBlog(blog)}>like</button></p>
       <p>Added by user {blog.user.name}</p>
     </div>
-    }
-    {showDetails && user.username === blog.user.username &&
+      }
+      {showDetails && user.username === blog.user.username &&
     <div>
       <button onClick={() => remove(blog)}>Remove</button>
     </div>
-    }
-  </div>
+      }
+    </div>
   )
 }
 export default Blog
