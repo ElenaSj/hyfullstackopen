@@ -7,10 +7,6 @@ Content-Type: application/json
     "author": "Robert C. Martin",
     "url": "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
     "likes": 2,
-    "user": {
-      "username": "Leatherman",
-      "name": "Niilo Nahka",
-      "id": "6450bde520b134f85aaf02e0"
-    },
+    "user": "6450bde520b134f85aaf02e0",
     "id": "6450f84d5405dc991b705e2d"
 }

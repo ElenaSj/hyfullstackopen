@@ -106,6 +106,14 @@ const App = () => {
     }
   }
 
+  const remove = async (blog) => {
+    if(window.confirm(`Do you want to delete blog ${blog.title}?`)) {
+      await blogService.remove(blog.id)
+      const newBlogs = blogs.filter(a => a.id != blog.id)
+      setBlogs(newBlogs)
+    }
+  }
+
   const handleLogout = () => {
     window.localStorage.removeItem('loggedUser')
     setUser(null)
@@ -129,7 +137,7 @@ const App = () => {
         <NewBlogForm createBlog={createBlog} />
       </Togglable>
       {sortedBlogs.map(blog =>
-        <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
+        <Blog key={blog.id} blog={blog} updateBlog={updateBlog} user={user} remove={remove} />
       )}
       </div>
     }
