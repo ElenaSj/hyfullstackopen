@@ -28,15 +28,15 @@ const NewBlogForm = ({ createBlog }) => {
       <form onSubmit={create}>
         <div>
           title:
-          <input type='text' value={title} onChange={ev => setTitle(ev.target.value)}/>
+          <input type='text' placeholder='Blog title' value={title} onChange={ev => setTitle(ev.target.value)}/>
         </div>
         <div>
           author:
-          <input type='text' value={author} onChange={ev => setAuthor(ev.target.value)}/>
+          <input type='text' placeholder='Blog author' value={author} onChange={ev => setAuthor(ev.target.value)}/>
         </div>
         <div>
           url:
-          <input type='text' value={url} onChange={ev => setUrl(ev.target.value)}/>
+          <input type='text' placeholder='Blog url' value={url} onChange={ev => setUrl(ev.target.value)}/>
         </div>
         <button type="submit">create</button>
       </form>
