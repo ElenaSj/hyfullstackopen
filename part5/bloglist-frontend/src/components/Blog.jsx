@@ -13,7 +13,7 @@ const Blog = ({ blog, updateBlog, user, remove }) => {
   }
 
   return (
-    <div style={blogStyle}>
+    <div style={blogStyle} className='blog'>
       {!showDetails &&
     <div>
       {blog.title}, {blog.author}<button onClick={() => toggleView(!showDetails)}>view</button>
