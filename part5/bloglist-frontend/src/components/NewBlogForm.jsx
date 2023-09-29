@@ -20,6 +20,9 @@ const NewBlogForm = ({ createBlog }) => {
       'url': url
     }
     createBlog(newBlog)
+    setTitle('')
+    setAuthor('')
+    setUrl('')
   }
 
   return(
