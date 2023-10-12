@@ -17,8 +17,10 @@ const AnecdoteList = () => {
     console.log('vote', id)
     dispatch(voteFor(id))
   }
+
+  const anecdotesToSort = [...anecdotes]
     
-  let sortedAnecdotes = anecdotes.sort((a, b) => a.votes-b.votes).toReversed()
+  const sortedAnecdotes = anecdotesToSort.sort((a, b) => a.votes-b.votes).toReversed()
   
   return (
     <div>
