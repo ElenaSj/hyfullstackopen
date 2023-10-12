@@ -5,7 +5,13 @@ const AnecdoteList = () => {
 
   const dispatch = useDispatch()
 
-  const anecdotes = useSelector(state => state)
+  const anecdotes = useSelector(({ filter, anecdotes }) => {
+    if ( filter === '') {
+        return anecdotes
+    } else {
+        return anecdotes.filter(a => a.content.includes(filter))
+    }
+  })
     
   const vote = (id) => {
     console.log('vote', id)
