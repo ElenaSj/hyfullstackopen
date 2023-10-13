@@ -14,9 +14,9 @@ const AnecdoteList = () => {
     }
   })
     
-  const vote = (id, content) => {
-    dispatch(voteFor(id))
-    dispatch(setNotification(`You voted '${content}'`))
+  const vote = (anecdote) => {
+    dispatch(voteFor(anecdote))
+    dispatch(setNotification(`You voted '${anecdote.content}'`))
     setTimeout(() => {
         dispatch(removeNotification())
     }, 5000)
@@ -35,7 +35,7 @@ const AnecdoteList = () => {
           </div>
             <div>
               has {anecdote.votes}
-              <button onClick={() => vote(anecdote.id, anecdote.content)}>vote</button>
+              <button onClick={() => vote(anecdote)}>vote</button>
             </div>
         </div>
       )}
