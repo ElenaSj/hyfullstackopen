@@ -19,8 +19,15 @@ const AnecdoteForm = () => {
     event.preventDefault()
     const content = event.target.anecdote.value
     event.target.anecdote.value = ''
-    newAnecdoteMutation.mutate({content, votes: 0})
-    notificationDispatch({ type: 'NOTIFY', payload: 'You added a new anecdote '+content})
+    newAnecdoteMutation.mutate({content, votes: 0}, 
+      {onError: () => {
+        notificationDispatch({ type: 'NOTIFY', payload: 'Anecdote must be at least 5 characters long'})
+        },
+      onSuccess: () => {
+        notificationDispatch({ type: 'NOTIFY', payload: 'You added a new anecdote '+content})
+      } 
+    }
+    )
     setTimeout(() => {
       notificationDispatch({ type: 'RESET'})
   }, 5000)
