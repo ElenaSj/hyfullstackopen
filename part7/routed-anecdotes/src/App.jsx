@@ -53,6 +53,7 @@ const CreateNew = ({addNew, setNotification}) => {
   const content = useField('text')
   const author = useField('text')
   const info = useField('text')
+
   const navigate = useNavigate()
 
   const handleSubmit = (e) => {
@@ -70,10 +71,16 @@ const CreateNew = ({addNew, setNotification}) => {
     
   }
 
+  const clearFields = (e) => {
+    author.reset()
+    content.reset()
+    info.reset()
+  }
+
   return (
     <div>
       <h2>create a new anecdote</h2>
-      <form onSubmit={handleSubmit}>
+      <form>
         <div>
           content
           <input {...content} />
@@ -86,7 +93,8 @@ const CreateNew = ({addNew, setNotification}) => {
           url for more info
           <input {...info} />
         </div>
-        <button>create</button>
+        <button onClick={()=>handleSubmit()}>create</button>
+        <button onClick={()=>clearFields()}>reset</button>
       </form>
     </div>
   )
