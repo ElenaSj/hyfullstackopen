@@ -1,22 +1,14 @@
 import { useState, useEffect, useRef } from "react";
+import { useDispatch } from "react-redux";
 import Blog from "./components/Blog";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
 import NewBlogForm from "./components/NewBlogForm";
 import Togglable from "./components/Togglable";
+import SuccessMessage from "./components/SuccessMessage";
+import ErrorMessage from "./components/ErrorMessage";
+import { notifySuccess, notifyError } from "./reducers/messageReducer";
 import "./app.css";
-
-const Success = ({ message }) => {
-  if (message) {
-    return <div className="success">{message}</div>;
-  }
-};
-
-const Error = ({ message }) => {
-  if (message) {
-    return <div className="error">{message}</div>;
-  }
-};
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -25,8 +17,7 @@ const App = () => {
   const [user, setUser] = useState(null);
   const blogFormRef = useRef();
 
-  const [errorMessage, setErrorMessage] = useState("");
-  const [succesMessage, setSuccesMessage] = useState("");
+  const dispatch = useDispatch()
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -47,17 +38,12 @@ const App = () => {
       let blog = await blogService.create(newBlog);
       blog = { ...blog, user: user };
       setBlogs(blogs.concat(blog));
-      setSuccesMessage(`Added new blog ${blog.title}`);
-      setTimeout(() => {
-        setSuccesMessage("");
-      }, 5000);
+      dispatch(notifySuccess(`Added new blog ${blog.title}`));
     } catch (exception) {
-      setErrorMessage(
+      dispatch(notifyError(
         "Failed to add blog. Please check that you have filled in title and url",
-      );
-      setTimeout(() => {
-        setErrorMessage("");
-      }, 5000);
+      ));
+
     }
   };
 
@@ -90,16 +76,10 @@ const App = () => {
       setUser(user);
       setUsername("");
       setPassword("");
-      setSuccesMessage(`Welcome back ${user.name}!`);
-      setTimeout(() => {
-        setSuccesMessage("");
-      }, 5000);
+      dispatch(notifySuccess(`Welcome back ${user.name}!`));
     } catch (exception) {
       console.log("something went wrong");
-      setErrorMessage("Wrong credentials, try again");
-      setTimeout(() => {
-        setErrorMessage("");
-      }, 5000);
+      dispatch(notifyError("Wrong credentials, try again"));
     }
   };
 
@@ -114,18 +94,15 @@ const App = () => {
   const handleLogout = () => {
     window.localStorage.removeItem("loggedUser");
     setUser(null);
-    setSuccesMessage("Logged out!");
-    setTimeout(() => {
-      setSuccesMessage("");
-    }, 5000);
+    dispatch(notifySuccess("Logged out!"));
   };
 
   let sortedBlogs = blogs.sort((a, b) => a.likes - b.likes).toReversed();
 
   return (
     <div>
-      <Success message={succesMessage} />
-      <Error message={errorMessage} />
+      <ErrorMessage />
+      <SuccessMessage />
       {user && (
         <div>
           <p>{user.name} is logged in</p>
