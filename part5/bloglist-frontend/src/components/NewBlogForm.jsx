@@ -1,9 +1,9 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 
-const NewBlogForm = ({ createBlog }) => {
+const NewBlogForm = ({ addBlog }) => {
   NewBlogForm.propTypes = {
-    createBlog: PropTypes.func.isRequired,
+    addBlog: PropTypes.func.isRequired,
   };
 
   const [title, setTitle] = useState("");
@@ -17,7 +17,7 @@ const NewBlogForm = ({ createBlog }) => {
       author: author,
       url: url,
     };
-    createBlog(newBlog);
+    addBlog(newBlog);
     setTitle("");
     setAuthor("");
     setUrl("");

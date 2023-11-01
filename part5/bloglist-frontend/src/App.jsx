@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Blog from "./components/Blog";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
@@ -8,10 +8,11 @@ import Togglable from "./components/Togglable";
 import SuccessMessage from "./components/SuccessMessage";
 import ErrorMessage from "./components/ErrorMessage";
 import { notifySuccess, notifyError } from "./reducers/messageReducer";
+import { initializeBlogs, createBlog } from "./reducers/blogReducer";
 import "./app.css";
 
 const App = () => {
-  const [blogs, setBlogs] = useState([]);
+  const blogs = useSelector(state => state.blogs)
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
@@ -20,7 +21,7 @@ const App = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs));
+    dispatch(initializeBlogs());
   }, [user]);
 
   useEffect(() => {
@@ -32,12 +33,11 @@ const App = () => {
     }
   }, []);
 
-  const createBlog = async (newBlog) => {
+  const addBlog = async (newBlog) => {
     try {
       blogFormRef.current.toggleVisibility();
-      let blog = await blogService.create(newBlog);
-      blog = { ...blog, user: user };
-      setBlogs(blogs.concat(blog));
+      const blog = {...newBlog, user: user}
+      dispatch(createBlog(blog))
       dispatch(notifySuccess(`Added new blog ${blog.title}`));
     } catch (exception) {
       dispatch(notifyError(
@@ -97,7 +97,9 @@ const App = () => {
     dispatch(notifySuccess("Logged out!"));
   };
 
-  let sortedBlogs = blogs.sort((a, b) => a.likes - b.likes).toReversed();
+  const blogsToSort = [...blogs]
+
+  let sortedBlogs = blogsToSort.sort((a, b) => a.likes - b.likes).toReversed();
 
   return (
     <div>
@@ -109,7 +111,7 @@ const App = () => {
           <button onClick={handleLogout}>logout</button>
           <h2>blogs</h2>
           <Togglable buttonLabel="New blog" ref={blogFormRef}>
-            <NewBlogForm createBlog={createBlog} />
+            <NewBlogForm addBlog={addBlog} />
           </Togglable>
           {sortedBlogs.map((blog) => (
             <Blog

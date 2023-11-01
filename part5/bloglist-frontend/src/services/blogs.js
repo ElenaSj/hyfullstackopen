@@ -24,9 +24,9 @@ const create = async (newBlog) => {
   const config = {
     headers: { Authorization: token },
   };
-
   const response = await axios.post(baseUrl, newBlog, config);
-  return response.data;
+  const returnBLog = {...response.data, user: newBlog.user}
+  return returnBLog;
 };
 
 const remove = async (id) => {
