@@ -8,7 +8,7 @@ import Togglable from "./components/Togglable";
 import SuccessMessage from "./components/SuccessMessage";
 import ErrorMessage from "./components/ErrorMessage";
 import { notifySuccess, notifyError } from "./reducers/messageReducer";
-import { initializeBlogs, createBlog } from "./reducers/blogReducer";
+import { initializeBlogs, createBlog, removeBlog, like } from "./reducers/blogReducer";
 import "./app.css";
 
 const App = () => {
@@ -50,15 +50,9 @@ const App = () => {
   const updateBlog = async (updatedBlog) => {
     updatedBlog = {
       ...updatedBlog,
-      user: updatedBlog.user.id,
       likes: updatedBlog.likes + 1,
     };
-    blogService.update(updatedBlog.id, updatedBlog);
-    const newBlogs = blogs.map((blog) => {
-      if (blog.id === updatedBlog.id) return { ...blog, likes: blog.likes + 1 };
-      else return blog;
-    });
-    setBlogs(newBlogs);
+    dispatch(like(updatedBlog))
   };
 
   const handleLogin = async (event) => {
@@ -85,9 +79,7 @@ const App = () => {
 
   const remove = async (blog) => {
     if (window.confirm(`Do you want to delete blog ${blog.title}?`)) {
-      await blogService.remove(blog.id);
-      const newBlogs = blogs.filter((a) => a.id !== blog.id);
-      setBlogs(newBlogs);
+      dispatch(removeBlog(blog))
     }
   };
 
