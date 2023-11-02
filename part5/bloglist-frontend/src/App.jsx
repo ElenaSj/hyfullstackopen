@@ -1,21 +1,20 @@
 import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Blog from "./components/Blog";
-import blogService from "./services/blogs";
-import loginService from "./services/login";
 import NewBlogForm from "./components/NewBlogForm";
 import Togglable from "./components/Togglable";
 import SuccessMessage from "./components/SuccessMessage";
 import ErrorMessage from "./components/ErrorMessage";
 import { notifySuccess, notifyError } from "./reducers/messageReducer";
 import { initializeBlogs, createBlog, removeBlog, like } from "./reducers/blogReducer";
+import { logIn, logOut, alreadyLoggedIn } from "./reducers/userReducer";
 import "./app.css";
 
 const App = () => {
   const blogs = useSelector(state => state.blogs)
+  const user = useSelector(state => state.user)
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [user, setUser] = useState(null);
   const blogFormRef = useRef();
 
   const dispatch = useDispatch()
@@ -25,11 +24,9 @@ const App = () => {
   }, [user]);
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem("loggedUser");
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON);
-      setUser(user);
-      blogService.setToken(user.token);
+    const loggedUser = window.localStorage.getItem("loggedUser");
+    if (loggedUser) {
+      dispatch(alreadyLoggedIn(loggedUser))
     }
   }, []);
 
@@ -58,23 +55,9 @@ const App = () => {
   const handleLogin = async (event) => {
     event.preventDefault();
     console.log("logging in as", username);
-
-    try {
-      const user = await loginService.login({
-        username,
-        password,
-      });
-
-      window.localStorage.setItem("loggedUser", JSON.stringify(user));
-      blogService.setToken(user.token);
-      setUser(user);
+    dispatch(logIn({username, password}))
       setUsername("");
       setPassword("");
-      dispatch(notifySuccess(`Welcome back ${user.name}!`));
-    } catch (exception) {
-      console.log("something went wrong");
-      dispatch(notifyError("Wrong credentials, try again"));
-    }
   };
 
   const remove = async (blog) => {
@@ -85,7 +68,7 @@ const App = () => {
 
   const handleLogout = () => {
     window.localStorage.removeItem("loggedUser");
-    setUser(null);
+    dispatch(logOut());
     dispatch(notifySuccess("Logged out!"));
   };
 
