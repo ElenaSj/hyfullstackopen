@@ -15,6 +15,7 @@ import SuccessMessage from "./components/SuccessMessage";
 import ErrorMessage from "./components/ErrorMessage";
 import Users from "./components/Users";
 import UserHeader from "./components/UserHeader";
+import User from "./components/User";
 import { notifySuccess, notifyError } from "./reducers/messageReducer";
 import {
   initializeBlogs,
@@ -78,6 +79,7 @@ const App = () => {
         <UserHeader />
         <Routes>
           <Route path="/users" element={<Users />} />
+          <Route path="/users/:id" element={<User />} />
         </Routes>
         {user && (
           <div>
