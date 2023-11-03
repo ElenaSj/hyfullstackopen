@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { logIn, logOut, alreadyLoggedIn } from "../reducers/userReducer";
 import { notifySuccess } from "../reducers/messageReducer";
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 const UserHeader = () => {
   const user = useSelector((state) => state.user);
@@ -15,6 +16,10 @@ const UserHeader = () => {
       dispatch(alreadyLoggedIn(loggedUser));
     }
   }, []);
+
+  const padding = {
+    paddingRight: 5,
+  };
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -32,11 +37,17 @@ const UserHeader = () => {
 
   return (
     <div>
+      <Link style={padding} to="/">
+        blogs
+      </Link>
+      <Link style={padding} to="/users">
+        users
+      </Link>
       {user && (
-        <div>
-          <p>{user.name} is logged in</p>
+        <span>
+          {user.name} is logged in
           <button onClick={handleLogout}>logout</button>
-        </div>
+        </span>
       )}
 
       {!user && (

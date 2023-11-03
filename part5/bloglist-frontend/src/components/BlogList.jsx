@@ -45,9 +45,11 @@ const BlogList = () => {
 
   return (
     <div>
-      <Togglable buttonLabel="New blog" ref={blogFormRef}>
-        <NewBlogForm addBlog={addBlog} />
-      </Togglable>
+      {user && (
+        <Togglable buttonLabel="New blog" ref={blogFormRef}>
+          <NewBlogForm addBlog={addBlog} />
+        </Togglable>
+      )}
       {sortedBlogs.map((blog) => (
         <div style={blogStyle} className="blog" key={blog.id}>
           <Link to={`/blogs/${blog.id}`}>
