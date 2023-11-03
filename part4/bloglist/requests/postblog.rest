@@ -1,7 +1,6 @@
-POST http://localhost:3003/api/blogs 
+POST http://localhost:3003/api/blogs/6450f8a95405dc991b705e35/comments
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpZCI6IjY0NTFmZGJlN2RlNjdhNDllNjM0OTllYSIsImlhdCI6MTY5NDQyMjAyMX0.wXry4VGp80O7EV1m3NRLzTFzHJe3pknPYC60FPj82ew
 
 {
-"title": "Kavioliitossa", "author": "Katja Ståhl", "url": "www.kavioliitto.fi"
+    "comment": "Great blog!"
 }

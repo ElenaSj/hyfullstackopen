@@ -44,7 +44,7 @@ const Blog = () => {
     <div style={blogStyle} className="blog">
       {blog && (
         <div>
-          <h3>{blog.title}</h3>
+          <h2>{blog.title}</h2>
           <p>Blogger: {blog.author}</p>
           <p>{blog.url}</p>
           <p>
@@ -53,6 +53,10 @@ const Blog = () => {
           </p>
           <p>Added by user {blog.user.name}</p>
           <button onClick={() => navigate("/")}>back</button>
+          <h3>comments</h3>
+          {blog.comments.map((comment) => (
+            <li key={comment}>{comment}</li>
+          ))}
         </div>
       )}
       {blog && user.username === blog.user.username && (
