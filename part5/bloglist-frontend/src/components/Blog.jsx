@@ -71,7 +71,7 @@ const Blog = () => {
           ))}
         </div>
       )}
-      {blog && user.username === blog.user.username && (
+      {blog && user && user.username === blog.user.username && (
         <div>
           <button onClick={() => remove(blog)}>Remove</button>
         </div>

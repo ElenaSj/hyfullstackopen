@@ -1,9 +1,10 @@
 import { useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import NewBlogForm from "./NewBlogForm";
 import Togglable from "./Togglable";
 import { useDispatch, useSelector } from "react-redux";
 import { initializeBlogs, createBlog } from "../reducers/blogReducer";
+import { Paper, Box } from "@mui/material";
 
 const BlogList = () => {
   const blogs = useSelector((state) => state.blogs);
@@ -11,18 +12,11 @@ const BlogList = () => {
   const blogFormRef = useRef();
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(initializeBlogs());
   }, []);
-
-  const blogStyle = {
-    padding: 5,
-    border: "solid",
-    borderWidth: 1,
-    marginTop: 5,
-    background: "FloralWhite",
-  };
 
   const addBlog = async (newBlog) => {
     try {
@@ -39,6 +33,18 @@ const BlogList = () => {
     }
   };
 
+  const bold = {
+    fontWeight: "bold",
+  };
+
+  const cursor = {
+    cursor: "pointer",
+  };
+
+  const goToBlog = (id) => {
+    navigate(`/blogs/${id}`);
+  };
+
   const blogsToSort = [...blogs];
 
   let sortedBlogs = blogsToSort.sort((a, b) => a.likes - b.likes).toReversed();
@@ -50,13 +56,25 @@ const BlogList = () => {
           <NewBlogForm addBlog={addBlog} />
         </Togglable>
       )}
-      {sortedBlogs.map((blog) => (
-        <div style={blogStyle} className="blog" key={blog.id}>
-          <Link to={`/blogs/${blog.id}`}>
-            {blog.title}, {blog.author}
-          </Link>
-        </div>
-      ))}
+      <Box
+        sx={{
+          display: "flex",
+          flexWrap: "wrap",
+          textAlign: "center",
+          "& > :not(style)": {
+            m: 1,
+            width: 128,
+            height: 128,
+          },
+        }}
+      >
+        {sortedBlogs.map((blog) => (
+          <Paper style={cursor} onClick={() => goToBlog(blog.id)} key={blog.id}>
+            <p style={bold}>{blog.title}</p>
+            <p>{blog.author}</p>
+          </Paper>
+        ))}
+      </Box>
     </div>
   );
 };
