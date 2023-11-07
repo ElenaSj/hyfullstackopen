@@ -11,6 +11,7 @@ const Blog = () => {
   const id = useParams().id;
   const user = useSelector((state) => state.user);
   const [blog, setBlog] = useState(null);
+  const [comment, setComment] = useState("");
 
   useEffect(() => {
     blogService.getBlog(id).then((blog) => setBlog(blog));
@@ -23,6 +24,12 @@ const Blog = () => {
     };
     setBlog(updatedBlog);
     dispatch(like(updatedBlog));
+  };
+
+  const commentBlog = async () => {
+    const commentedBlog = await blogService.comment(blog.id, comment);
+    setBlog(commentedBlog);
+    setComment("");
   };
 
   const remove = async (blog) => {
@@ -54,6 +61,11 @@ const Blog = () => {
           <p>Added by user {blog.user.name}</p>
           <button onClick={() => navigate("/")}>back</button>
           <h3>comments</h3>
+          <input
+            value={comment}
+            onChange={(ev) => setComment(ev.target.value)}
+          ></input>
+          <button onClick={() => commentBlog()}>add comment</button>
           {blog.comments.map((comment) => (
             <li key={comment}>{comment}</li>
           ))}

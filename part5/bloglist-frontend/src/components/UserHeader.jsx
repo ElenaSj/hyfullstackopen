@@ -2,13 +2,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { logIn, logOut, alreadyLoggedIn } from "../reducers/userReducer";
 import { notifySuccess } from "../reducers/messageReducer";
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const UserHeader = () => {
   const user = useSelector((state) => state.user);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loggedUser = window.localStorage.getItem("loggedUser");
@@ -31,6 +32,7 @@ const UserHeader = () => {
 
   const handleLogout = () => {
     window.localStorage.removeItem("loggedUser");
+    navigate("/");
     dispatch(logOut());
     dispatch(notifySuccess("Logged out!"));
   };
