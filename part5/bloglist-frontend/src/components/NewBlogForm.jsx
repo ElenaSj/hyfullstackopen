@@ -1,5 +1,8 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
+import { TextField } from "@mui/material";
+import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
 
 const NewBlogForm = ({ addBlog }) => {
   NewBlogForm.propTypes = {
@@ -10,8 +13,7 @@ const NewBlogForm = ({ addBlog }) => {
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
 
-  const create = (event) => {
-    event.preventDefault();
+  const create = () => {
     let newBlog = {
       title: title,
       author: author,
@@ -25,37 +27,43 @@ const NewBlogForm = ({ addBlog }) => {
 
   return (
     <div>
-      <h2>new blog</h2>
-      <form onSubmit={create}>
+      <h2>New blog</h2>
+      <Box
+        component="form"
+        sx={{
+          "& .MuiTextField-root": { m: 1, width: "50ch" },
+        }}
+        noValidate
+        autoComplete="off"
+      >
         <div>
-          title:
-          <input
+          <TextField
+            required
             type="text"
-            placeholder="Blog title"
+            label="Blog title"
             value={title}
             onChange={(ev) => setTitle(ev.target.value)}
           />
         </div>
         <div>
-          author:
-          <input
+          <TextField
             type="text"
-            placeholder="Blog author"
+            label="Blog author"
             value={author}
             onChange={(ev) => setAuthor(ev.target.value)}
           />
         </div>
         <div>
-          url:
-          <input
+          <TextField
+            required
             type="text"
-            placeholder="Blog url"
+            label="Blog url"
             value={url}
             onChange={(ev) => setUrl(ev.target.value)}
           />
         </div>
-        <button type="submit">create</button>
-      </form>
+      </Box>
+      <Button onClick={() => create()}>create</Button>
     </div>
   );
 };

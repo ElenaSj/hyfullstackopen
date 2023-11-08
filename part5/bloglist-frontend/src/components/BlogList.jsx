@@ -37,10 +37,6 @@ const BlogList = () => {
     fontWeight: "bold",
   };
 
-  const cursor = {
-    cursor: "pointer",
-  };
-
   const goToBlog = (id) => {
     navigate(`/blogs/${id}`);
   };
@@ -69,7 +65,16 @@ const BlogList = () => {
         }}
       >
         {sortedBlogs.map((blog) => (
-          <Paper style={cursor} onClick={() => goToBlog(blog.id)} key={blog.id}>
+          <Paper
+            sx={{
+              "&:hover": {
+                cursor: "pointer",
+                boxShadow: 5,
+              },
+            }}
+            onClick={() => goToBlog(blog.id)}
+            key={blog.id}
+          >
             <p style={bold}>{blog.title}</p>
             <p>{blog.author}</p>
           </Paper>
