@@ -7,6 +7,7 @@ import UserHeader from "./components/UserHeader";
 import User from "./components/User";
 import BlogList from "./components/BlogList";
 import Blog from "./components/Blog";
+
 import "./app.css";
 
 const App = () => {
@@ -16,8 +17,9 @@ const App = () => {
         <div>
           <ErrorMessage />
           <SuccessMessage />
+
           <UserHeader />
-          <h1>Blog App</h1>
+
           <Routes>
             <Route path="/" element={<BlogList />} />
             <Route path="/blogs/:id" element={<Blog />} />

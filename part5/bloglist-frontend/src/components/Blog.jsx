@@ -3,6 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import blogService from "../services/blogs";
 import { removeBlog, like } from "../reducers/blogReducer";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import { TextField } from "@mui/material";
 
 const Blog = () => {
   const dispatch = useDispatch();
@@ -39,41 +45,56 @@ const Blog = () => {
     }
   };
 
-  const blogStyle = {
-    padding: 5,
-    border: "solid",
-    borderWidth: 1,
-    marginTop: 5,
-    background: "FloralWhite",
-  };
-
   return (
-    <div style={blogStyle} className="blog">
+    <div>
       {blog && (
         <div>
-          <h2>{blog.title}</h2>
-          <p>Blogger: {blog.author}</p>
-          <p>{blog.url}</p>
-          <p>
-            likes {blog.likes}{" "}
-            <button onClick={() => updateBlog(blog)}>like</button>
-          </p>
-          <p>Added by user {blog.user.name}</p>
-          <button onClick={() => navigate("/")}>back</button>
-          <h3>comments</h3>
-          <input
-            value={comment}
-            onChange={(ev) => setComment(ev.target.value)}
-          ></input>
-          <button onClick={() => commentBlog()}>add comment</button>
-          {blog.comments.map((comment) => (
-            <li key={comment}>{comment}</li>
-          ))}
-        </div>
-      )}
-      {blog && user && user.username === blog.user.username && (
-        <div>
-          <button onClick={() => remove(blog)}>Remove</button>
+          <Card sx={{ minWidth: 275 }}>
+            <CardContent>
+              <Typography variant="subtitle1" color="text.secondary">
+                Added by user {blog.user.name}
+              </Typography>
+              <Typography variant="h5">{blog.title}</Typography>
+              <Typography variant="subtitle1" color="text.secondary">
+                Author: {blog.author}
+              </Typography>
+              <Typography variant="h6">Likes: {blog.likes}</Typography>
+
+              <Typography variant="body1">{blog.url}</Typography>
+            </CardContent>
+            <CardActions>
+              <Button size="small" onClick={() => updateBlog(blog)}>
+                like
+              </Button>
+              {blog && user && user.username === blog.user.username && (
+                <Button onClick={() => remove(blog)}>Delete blog</Button>
+              )}
+              <Button
+                variant="contained"
+                size="small"
+                onClick={() => navigate("/")}
+              >
+                back
+              </Button>
+            </CardActions>
+            <CardContent>
+              <Typography variant="h5">Comments</Typography>
+              {blog.comments.map((comment) => (
+                <Typography variant="body1" key={comment}>
+                  • {comment}
+                </Typography>
+              ))}
+            </CardContent>
+            <CardActions>
+              <TextField
+                value={comment}
+                onChange={(ev) => setComment(ev.target.value)}
+              />
+              <Button size="small" onClick={() => commentBlog()}>
+                Add comment
+              </Button>
+            </CardActions>
+          </Card>
         </div>
       )}
     </div>

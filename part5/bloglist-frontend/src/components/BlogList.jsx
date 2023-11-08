@@ -4,7 +4,7 @@ import NewBlogForm from "./NewBlogForm";
 import Togglable from "./Togglable";
 import { useDispatch, useSelector } from "react-redux";
 import { initializeBlogs, createBlog } from "../reducers/blogReducer";
-import { Paper, Box } from "@mui/material";
+import { Paper, Box, Typography } from "@mui/material";
 
 const BlogList = () => {
   const blogs = useSelector((state) => state.blogs);
@@ -19,22 +19,9 @@ const BlogList = () => {
   }, []);
 
   const addBlog = async (newBlog) => {
-    try {
-      blogFormRef.current.toggleVisibility();
-      const blog = { ...newBlog, user: user };
-      dispatch(createBlog(blog));
-      dispatch(notifySuccess(`Added new blog ${blog.title}`));
-    } catch (exception) {
-      dispatch(
-        notifyError(
-          "Failed to add blog. Please check that you have filled in title and url",
-        ),
-      );
-    }
-  };
-
-  const bold = {
-    fontWeight: "bold",
+    blogFormRef.current.toggleVisibility();
+    const blog = { ...newBlog, user: user };
+    dispatch(createBlog(blog));
   };
 
   const goToBlog = (id) => {
@@ -47,6 +34,7 @@ const BlogList = () => {
 
   return (
     <div>
+      <Typography variant="h2">Blogs</Typography>
       {user && (
         <Togglable buttonLabel="New blog" ref={blogFormRef}>
           <NewBlogForm addBlog={addBlog} />
@@ -75,8 +63,10 @@ const BlogList = () => {
             onClick={() => goToBlog(blog.id)}
             key={blog.id}
           >
-            <p style={bold}>{blog.title}</p>
-            <p>{blog.author}</p>
+            <Typography fontWeight="bold" variant="body1">
+              {blog.title}
+            </Typography>
+            <Typography variant="body1">{blog.author}</Typography>
           </Paper>
         ))}
       </Box>
