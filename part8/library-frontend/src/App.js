@@ -44,6 +44,17 @@ const CREATE_BOOK = gql`
   }
 `
 
+const UPDATE_BIRTHYEAR = gql`
+  mutation editAuthor($name: String!, $setBornTo: Int!) {
+    editAuthor(name: $name, setBornTo: $setBornTo) {
+      name
+      born
+      bookCount
+      id
+    }
+  }
+`
+
 const App = () => {
   const [page, setPage] = useState('authors')
   const resultAuthors = useQuery(ALL_AUTHORS)
@@ -53,8 +64,16 @@ const App = () => {
     refetchQueries: [{ query: ALL_AUTHORS }, { query: ALL_BOOKS }],
   })
 
+  const [changeBirthyear] = useMutation(UPDATE_BIRTHYEAR, {
+    refetchQueries: [{ query: ALL_AUTHORS }],
+  })
+
   const newBook = (title, author, published, genres) => {
     createBook({ variables: { title, author, published, genres } })
+  }
+
+  const updateAuthor = (name, setBornTo) => {
+    changeBirthyear({ variables: { name, setBornTo } })
   }
 
   if (resultAuthors.loading || resultBooks.loading) {
@@ -72,6 +91,7 @@ const App = () => {
       <Authors
         show={page === 'authors'}
         authors={resultAuthors.data.allAuthors}
+        updateAuthor={updateAuthor}
       />
 
       <Books show={page === 'books'} books={resultBooks.data.allBooks} />
