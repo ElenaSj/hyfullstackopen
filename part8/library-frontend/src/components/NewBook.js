@@ -3,7 +3,7 @@ import { useState } from 'react'
 const NewBook = (props) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
-  const [published, setPublished] = useState('')
+  const [publ, setPublished] = useState('')
   const [genre, setGenre] = useState('')
   const [genres, setGenres] = useState([])
 
@@ -14,7 +14,9 @@ const NewBook = (props) => {
   const submit = async (event) => {
     event.preventDefault()
 
-    console.log('add book...')
+    const published = Number(publ)
+
+    props.newBook(title, author, published, genres)
 
     setTitle('')
     setPublished('')
@@ -48,8 +50,8 @@ const NewBook = (props) => {
         <div>
           published
           <input
-            type="number"
-            value={published}
+            type='number'
+            value={publ}
             onChange={({ target }) => setPublished(target.value)}
           />
         </div>
@@ -58,12 +60,12 @@ const NewBook = (props) => {
             value={genre}
             onChange={({ target }) => setGenre(target.value)}
           />
-          <button onClick={addGenre} type="button">
+          <button onClick={addGenre} type='button'>
             add genre
           </button>
         </div>
         <div>genres: {genres.join(' ')}</div>
-        <button type="submit">create book</button>
+        <button type='submit'>create book</button>
       </form>
     </div>
   )
